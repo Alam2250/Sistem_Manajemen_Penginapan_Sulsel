@@ -1,4 +1,6 @@
 #include "Kabupaten.cpp"
+#include "sistem_lantai.cpp"
+#include "sistem_kamar.cpp"
 
 int main() {
     //Tambahkan semua edge (jarak dalam km, sesuai peta)
@@ -57,6 +59,64 @@ int main() {
     primMST_and_path(6, 0);
 
     cout << "\n";
+
+    // --- Membangun Struktur Pohon ---
+    
+    // Lantai 3 (Root)
+    Kamar* A1 = new Kamar("A1");
+
+    // Lantai 2 (Terhubung ke A1)
+    Kamar* B1 = new Kamar("B1");
+    Kamar* B2 = new Kamar("B2");
+    A1->kiri = B1;
+    A1->kanan = B2;
+
+    // Lantai 1 (C1, C2 ke B1 | C3, C4 ke B2)
+    B1->kiri = new Kamar("C1");
+    B1->kanan = new Kamar("C2");
+    B2->kiri = new Kamar("C3");
+    B2->kanan = new Kamar("C4");
+
+    int pilihan;
+    string idInput, namaInput;
+
+    do {
+        cout << "\n--- SISTEM PENGINAPAN BINARY TREE ---" << endl;
+        cout << "1. Tampilkan Status Kamar" << endl;
+        cout << "2. Pesan Kamar" << endl;
+        cout << "0. Keluar" << endl;
+        cout << "Pilih: "; cin >> pilihan;
+
+        switch (pilihan) {
+            case 1:
+                cout << "\nStatus Kamar Saat Ini:" << endl;
+                tampilkanStatus(A1);
+                break;
+            case 2:
+    // 1. Pilih Lantai
+    cout << "Pilih Lantai (Lantai-1/Lantai-2/Lantai-3): "; cin >> inputLantai;
+    Lantai* L = cariLantai(root, inputLantai);
+
+    if (L != nullptr) {
+        // 2. Pilih Kamar
+        cout << "Masukkan Nomor Kamar: "; cin >> inputKamar;
+        
+        bool ketemu = false;
+        for (auto& k : L->daftarKamar) {
+            if (k.nomorKamar == inputKamar) {
+                ketemu = true;
+                cekDanPesan(k); // 3. Panggil validasi (Batal jika terisi)
+                break;
+            }
+        }
+        if (!ketemu) cout << "Kamar tidak terdaftar." << endl;
+    } else {
+        cout << "Lantai tidak ditemukan!" << endl;
+    }
+    break;
+        }
+    } while (pilihan != 0);
+
     return 0;
 }
 
