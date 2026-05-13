@@ -1,124 +1,61 @@
+// =========================== BAGIAN INI DIKERJAKAN OLEH RIDHO ANUGRAH ==========================
+#ifndef SISTEM_PENGINAPAN_CPP
+#define SISTEM_PENGINAPAN_CPP // pencegahan agar tidak terjadi duplikasi include
 #include "sistem_lantai.cpp"
-#include "kabupaten.cpp"
 
-struct Penginapan {
-
+struct Penginapan
+{
     string nama;
-    Kamar* rootKamar;
-    Penginapan* next;
+    Lantai *rootLantai;
+    Penginapan *next;
+
+    Penginapan(string n){
+        nama = n;
+        rootLantai = buatLantaiDefault();
+        next = nullptr;
+    }
 };
 
-// head linked list tiap kota
-Penginapan* daftarPenginapan[V];
-
 // tambah penginapan
-void tambahPenginapan(int kota, string namaHotel) {
-
-    Penginapan* baru = new Penginapan;
-
-    baru->nama = namaHotel;
-    baru->rootKamar = new Kamar("A1");
-    baru->rootKamar->kiri = new Kamar("B1");
-    baru->rootKamar->kanan = new Kamar("B2");
-    baru->terisi = false;
-    baru->next = NULL;
-
-    if (daftarPenginapan[kota] == NULL) {
-
-        daftarPenginapan[kota] = baru;
+void tambahPenginapan(Penginapan* &head, string namaHotel)
+{
+    Penginapan *baru = new Penginapan(namaHotel);
+    if (head == nullptr) {
+        head = baru;
+        return;
     }
-    else {
-
-        Penginapan* temp = daftarPenginapan[kota];
-
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-
-        temp->next = baru;
-    }
+    Penginapan* temp = head;
+    while (temp->next != nullptr)
+        temp = temp->next;
+    temp->next = baru;
 }
 
 // tampil penginapan
-void tampilPenginapan(int kota) {
-
-    cout << "\n========================================\n";
-    cout << " Daftar Penginapan di "
-         << kotaName[kota] << endl;
-    cout << "========================================\n";
-
-    Penginapan* temp = daftarPenginapan[kota];
-
+void tampilPenginapan(Penginapan* head)
+{
+    if (head == nullptr) {
+        cout << "   (Belum ada penginapan di kota ini)\n";
+        return;
+    }
+    Penginapan* temp = head;
     int no = 1;
-
-    while (temp != NULL) {
-
-        cout << no << ". "
-             << temp->nama;
-
-        if (temp->terisi)
-            cout << " [TERISI]";
-        else
-            cout << " [KOSONG]";
-
-        cout << endl;
-
+    while (temp != nullptr) {
+        cout << "  " << no << ". " << temp->nama << "\n";
         temp = temp->next;
         no++;
     }
 }
 
 // pesan penginapan
-void pesanPenginapan(int kota, int pilihan, string namaUser) {
-
-    Penginapan* temp = daftarPenginapan[kota];
-
+// Ambil penginapan ke-n dari linked list (index mulai 1)
+Penginapan* getPenginapan(Penginapan* head, int pilihan) {
+    Penginapan* temp = head;
     int no = 1;
-
-    while (temp != NULL && no < pilihan) {
-
+    while (temp != nullptr && no < pilihan) {
         temp = temp->next;
         no++;
     }
-
-    if (temp != NULL) {
-        string idKamar;
-        cout << "Masukkan Kode Kamar (A1/B1/B2, dll): ";
-        cin >> idKamar;
-
-        pesanKamar(temp->rootKamar, idKamar, namaUser);
-       
-    }
-
-    if (temp->terisi) {
-
-        cout << "\n========================================\n";
-        cout << " Maaf " << namaUser << endl;
-        cout << " Penginapan sudah terisi!\n";
-        cout << " Akses ditolak.\n";
-        cout << "========================================\n";
-    }
-    else {
-
-        temp->terisi = true;
-
-        cout << "\n========================================\n";
-        cout << " PEMESANAN BERHASIL\n";
-        cout << "========================================\n";
-
-        cout << " Nama Pengguna : "
-             << namaUser << endl;
-
-        cout << " Kota Tujuan   : "
-             << kotaName[kota] << endl;
-
-        cout << " Penginapan    : "
-             << temp->nama << endl;
-    }
+    return temp;
 }
 
-
-// =====================================================
-//                          MAIN
-// =====================================================
-
+#endif
