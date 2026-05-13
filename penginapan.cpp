@@ -1,3 +1,4 @@
+#include "sistem_lantai.cpp"
 #include "kabupaten.cpp"
 
 
@@ -10,7 +11,7 @@
 struct Penginapan {
 
     string nama;
-    bool terisi;
+    Kamar* rootKamar;
     Penginapan* next;
 };
 
@@ -23,6 +24,9 @@ void tambahPenginapan(int kota, string namaHotel) {
     Penginapan* baru = new Penginapan;
 
     baru->nama = namaHotel;
+    baru->rootKamar = new Kamar("A1");
+    baru->rootKamar->kiri = new Kamar("B1");
+    baru->rootKamar->kanan = new Kamar("B2");
     baru->terisi = false;
     baru->next = NULL;
 
@@ -84,10 +88,13 @@ void pesanPenginapan(int kota, int pilihan, string namaUser) {
         no++;
     }
 
-    if (temp == NULL) {
+    if (temp != NULL) {
+        string idKamar;
+        cout << "Masukkan Kode Kamar (A1/B1/B2, dll): ";
+        cin >> idKamar;
 
-        cout << "\nPenginapan tidak ditemukan!\n";
-        return;
+        pesanKamar(temp->rootKamar, idKamar, namaUser);
+       
     }
 
     if (temp->terisi) {
