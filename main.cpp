@@ -60,6 +60,95 @@ int main() {
 
     cout << "\n";
 
+
+    // inisialisasi linked list
+    for (int i = 0; i < V; i++) {
+        daftarPenginapan[i] = NULL;
+    }
+
+    // =================================================
+    //              DATA PENGINAPAN
+    // =================================================
+
+    // Makassar
+    tambahPenginapan(0, "Hotel Claro Makassar");
+    tambahPenginapan(0, "Swiss Belhotel");
+    tambahPenginapan(0, "Aryaduta Makassar");
+    tambahPenginapan(0, "The Rinra");
+    tambahPenginapan(0, "Hotel Gammara");
+
+    // Gowa
+    tambahPenginapan(1, "Hotel Gowa Indah");
+    tambahPenginapan(1, "Malino Highland");
+    tambahPenginapan(1, "Grand Sayang");
+    tambahPenginapan(1, "Hotel Rewako");
+    tambahPenginapan(1, "Wisata Malino");
+
+    // Sinjai
+    tambahPenginapan(6, "Hotel Sinjai");
+    tambahPenginapan(6, "Grand Rofina");
+    tambahPenginapan(6, "Sinjai Wisata");
+    tambahPenginapan(6, "Larea Rea");
+    tambahPenginapan(6, "Sinjai Indah");
+
+    // =================================================
+    //                  GRAPH EDGE
+    // =================================================
+
+    addEdge(0, 1, 13);
+    addEdge(1, 6, 148);
+    addEdge(6, 7, 69);
+    addEdge(7, 10, 200);
+    addEdge(10, 11, 25);
+
+    // =================================================
+    //              INPUT PENGGUNA
+    // =================================================
+
+    string namaUser;
+
+    cout << "========================================\n";
+    cout << " SISTEM PEMESANAN PENGINAPAN\n";
+    cout << "========================================\n";
+
+    cout << "Masukkan nama pengguna : ";
+    getline(cin, namaUser);
+
+    // tampil daftar kota
+    cout << "\nDaftar Kota:\n";
+
+    for (int i = 0; i < V; i++) {
+
+        cout << i << ". "
+             << kotaName[i] << endl;
+    }
+
+    int pilihKota;
+
+    cout << "\nPilih kota tujuan : ";
+    cin >> pilihKota;
+
+    // tampil penginapan
+    tampilPenginapan(pilihKota);
+
+    int pilihHotel;
+
+    cout << "\nPilih nomor penginapan : ";
+    cin >> pilihHotel;
+
+    // proses pemesanan
+    pesanPenginapan(
+        pilihKota,
+        pilihHotel,
+        namaUser
+    );
+
+    // contoh pemanggilan dijkstra
+    dijkstra(0, 11);
+
+    cout << endl;
+
+
     // --- Membangun Struktur Pohon ---
     
     // Lantai 3 (Root)
@@ -117,6 +206,105 @@ int main() {
         }
     } while (pilihan != 0);
 
+
+    const int JUMLAH_KAMAR = 6;
+    string kamar[JUMLAH_KAMAR];
+
+    int pilihan, nomor;
+
+    // Semua kamar awalnya kosong
+    for (int i = 0; i < JUMLAH_KAMAR; i++) {
+        kamar[i] = "Kosong";
+    }
+
+    do {
+        cout << "\n===== SISTEM KAMAR PENGINAPAN =====" << endl;
+        cout << "1. Lihat Status Kamar" << endl;
+        cout << "2. Pesan Kamar" << endl;
+        cout << "3. Check Out / Kosongkan Kamar" << endl;
+        cout << "4. Keluar" << endl;
+        cout << "Pilih Menu : ";
+        cin >> pilihan;
+
+        switch (pilihan) {
+
+            case 1:
+                cout << "\n===== STATUS KAMAR =====" << endl;
+
+                for (int i = 0; i < JUMLAH_KAMAR; i++) {
+
+                    cout << "Kamar [" << i << "] : ";
+
+                    if (kamar[i] == "Kosong") {
+                        cout << "KOSONG";
+                    } else {
+                        cout << "TERISI oleh " << kamar[i];
+                    }
+
+                    cout << endl;
+                }
+                break;
+
+            case 2:
+                cout << "\nMasukkan nomor indeks kamar (0-5) : ";
+                cin >> nomor;
+
+                if (nomor >= 0 && nomor < JUMLAH_KAMAR) {
+
+                    if (kamar[nomor] == "Kosong") {
+
+                        cout << "Masukkan nama pengunjung : ";
+                        cin >> kamar[nomor];
+
+                        cout << "Kamar berhasil dipesan." << endl;
+
+                    } else {
+
+                        cout << "Kamar sudah terisi oleh "
+                             << kamar[nomor] << endl;
+                    }
+
+                } else {
+                    cout << "Nomor kamar tidak valid." << endl;
+                }
+                break;
+
+            case 3:
+                cout << "\nMasukkan nomor indeks kamar (0-5) : ";
+                cin >> nomor;
+
+                if (nomor >= 0 && nomor < JUMLAH_KAMAR) {
+
+                    if (kamar[nomor] == "Kosong") {
+
+                        cout << "Kamar sudah kosong." << endl;
+
+                    } else {
+
+                        cout << "Pengunjung "
+                             << kamar[nomor]
+                             << " telah check out." << endl;
+
+                        kamar[nomor] = "Kosong";
+                    }
+
+                } else {
+                    cout << "Nomor kamar tidak valid." << endl;
+                }
+                break;
+
+            case 4:
+                cout << "\nTerima kasih telah menggunakan sistem penginapan."
+                     << endl;
+                break;
+
+            default:
+                cout << "Menu tidak tersedia." << endl;
+        }
+
+    } while (pilihan != 4);
+
     return 0;
+
 }
 
