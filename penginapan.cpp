@@ -1,13 +1,6 @@
 #include "sistem_lantai.cpp"
 #include "kabupaten.cpp"
 
-
-
-
-// =====================================================
-//              LINKED LIST PENGINAPAN
-// =====================================================
-
 struct Penginapan {
 
     string nama;
